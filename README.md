@@ -100,8 +100,3 @@ Body (JSON):
 ### 5. Удалить задачу
 **DELETE** `/api/tasks/{id}`
 
-
-
-git add README.md
-git commit -m "Add professional README documentation"
-git push

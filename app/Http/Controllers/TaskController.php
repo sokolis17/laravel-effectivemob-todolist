@@ -6,6 +6,7 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 
 class TaskController extends Controller
 {
@@ -14,7 +15,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return TaskResource::collection(Task::all());
     }
 
     /**
@@ -27,7 +28,7 @@ class TaskController extends Controller
 
         $task = Task::create($validated);
         
-        return response()->json($task, 201);
+        return response()->json(new TaskResource($task), 201);
         
     }
 
@@ -36,7 +37,8 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        return Task::findOrFail($id);
+        $task =Task::findOrFail($id);
+        return  new TaskResource($task);
     }
 
     /**
@@ -50,7 +52,7 @@ class TaskController extends Controller
 
         $task->update($validated);
         
-        return response()->json($task, 200);
+        return new TaskResource($task);
     }
 
     /**

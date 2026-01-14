@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 
 class TaskController extends Controller
 {
@@ -12,24 +15,20 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return TaskResource::collection(Task::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed',
-        ]);
+        $validated = $request->validated();
 
         $task = Task::create($validated);
         
-        return response()->json($task, 201);
+        return response()->json(new TaskResource($task), 201);
         
     }
 
@@ -38,25 +37,22 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        return Task::findOrFail($id);
+        $task =Task::findOrFail($id);
+        return  new TaskResource($task);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTaskRequest $request, string $id)
     {
         $task = Task::findOrFail($id);
 
-        $validated = $request->validate([
-            'title' => 'sometimes|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'sometimes|in:pending,completed',
-        ]);
+        $validated = $request->validated();
 
         $task->update($validated);
         
-        return response()->json($task, 200);
+        return new TaskResource($task);
     }
 
     /**

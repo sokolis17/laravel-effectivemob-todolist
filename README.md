@@ -52,5 +52,106 @@ php artisan serve
 ```
 API будет доступно по адресу: `http://127.0.0.1:8000`
 
+---
 
+### Примеры использования API (Documentation)
 
+Вы можете тестировать API через **Postman**, **Insomnia** или консольную утилиту **curl**.
+
+### 1. Получить список всех задач
+Возвращает массив задач.
+
+**Запрос:**
+```bash
+GET /api/tasks
+```
+
+**Пример curl:**
+```bash
+curl -X GET http://127.0.0.1:8000/api/tasks \
+  -H "Accept: application/json"
+```
+
+---
+
+### 2. Создать новую задачу
+Создает задачу со статусом `pendпеing` по умолчанию.
+
+**Запрос:**
+```bash
+POST /api/tasks
+```
+
+**Тело запроса (JSON):**
+```json
+{
+    "title": "Изучить Laravel Resources",
+    "description": "Понять зачем нужны API Resources",
+    "status": "pending"
+}
+```
+
+**Пример curl:**
+```bash
+curl -X POST http://127.0.0.1:8000/api/tasks \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"title": "Купить молоко", "description": "В магазине у дома"}'
+```
+
+---
+
+### 3. Получить задачу по ID
+Возвращает данные одной конкретной задачи.
+
+**Запрос:**
+```bash
+GET /api/tasks/{id}
+```
+
+**Пример curl:**
+```bash
+curl -X GET http://127.0.0.1:8000/api/tasks/1 \
+  -H "Accept: application/json"
+```
+
+---
+
+### 4. Обновить задачу
+Обновляет только переданные поля (частичное обновление).
+
+**Запрос:**
+```bash
+PUT /api/tasks/{id}
+```
+
+**Тело запроса (JSON):**
+```json
+{
+    "status": "completed"
+}
+```
+
+**Пример curl:**
+```bash
+curl -X PUT http://127.0.0.1:8000/api/tasks/1 \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"status": "completed"}'
+```
+
+---
+
+### 5. Удалить задачу
+Удаляет задачу безвозвратно. Возвращает пустой ответ (204 No Content).
+
+**Запрос:**
+```bash
+DELETE /api/tasks/{id}
+```
+
+**Пример curl:**
+```bash
+curl -X DELETE http://127.0.0.1:8000/api/tasks/1 \
+  -H "Accept: application/json"
+```
